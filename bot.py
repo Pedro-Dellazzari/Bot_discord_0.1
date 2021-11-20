@@ -245,9 +245,11 @@ def search(Text):
         #escolhendo o número aleatório 
         url_embed = random.choice(url)
 
-        return url_embed 
+        return url_embed
+
 
 #Função para pegar a moeda 
+
 def bolsa(symbol):
 
     # Pegando a url 
