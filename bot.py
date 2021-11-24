@@ -18,7 +18,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 #Pegando o token do bot 
-token_bot = 'ODg5OTY3MTk3MjczODYyMTg0.YUo8ig.f3V3T8Y8JxFTjf_F8Yk7eCY5fVw'
+token_bot = 'ODg5OTY3MTk3MjczODYyMTg0.YUo8ig.-YuZyT0B6Z_HmssTgx0wwHKyz0U'
 
 #Conectando com o client 
 client = discord.Client()

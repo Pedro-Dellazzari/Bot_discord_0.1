@@ -1,0 +1,7 @@
+youtube_dl==2021.6.6
+requests==2.25.1
+matplotlib==3.4.2
+pandas==1.2.5
+discord==1.7.3
+giphy_client==1.0.0
+riotwatcher==3.2.0
