@@ -1,6 +1,7 @@
-#Importando as bibliotecas
+# Importando as bibliotecas
 import os
 from re import match
+import base64
 import discord
 from discord import message
 from discord.errors import ClientException
@@ -17,17 +18,23 @@ from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 import matplotlib.pyplot as plt
 
-#Pegando o token do bot 
-token_bot = 'ODg5OTY3MTk3MjczODYyMTg0.YUo8ig.-YuZyT0B6Z_HmssTgx0wwHKyz0U'
-
-#Conectando com o client 
+# Conectando com o client
 client = discord.Client()
 
-#Criando o prefix para comandos 
+# Criando o prefix para comandos
 bot = commands.Bot(command_prefix='!')
 
-#---FUNÇÕES---
-#Função para xingamento 
+
+def getToken():
+    token = None
+    with open('token.txt', 'r') as f:
+        decoded = base64.b64decode(f.read())
+        token = str(decoded, 'utf-8')
+    return token
+
+
+# ---FUNÇÕES---
+# Função para xingamento
 def xingamento(user=None):
     response = requests.get("http://xinga-me.appspot.com/api")
     text_json = json.loads(response.text)
@@ -37,17 +44,18 @@ def xingamento(user=None):
     if user != None:
         frase = "{} é um {}".format(user, frase_json)
 
-        return frase 
+        return frase
     else:
-        
+
         return frase_json
 
-#Função para gifs 
+
+# Função para gifs
 def gifs(text=None):
     api_key = 'L38sX2hSuzSD5HjfbY9xgWIdrArEPmSW'
     api_instance = giphy_client.DefaultApi()
 
-    #Condicional 
+    # Condicional
     if text == None:
         api_response = api_instance.gifs_trending_get(api_key, limit=10, rating='g')
         lst = list(api_response.data)
@@ -68,7 +76,8 @@ def gifs(text=None):
 
         return url
 
-#Função para pegar a auth do reddit 
+
+# Função para pegar a auth do reddit
 def auth_reddit():
     global headers
     global TOKEN
@@ -86,7 +95,6 @@ def auth_reddit():
 
     # setup our header info, which gives reddit a brief description of our app
     headers = {'User-Agent': 'MyBot/0.0.1'}
-    
 
     # send our request for an OAuth token
     res = requests.post('https://www.reddit.com/api/v1/access_token',
@@ -95,7 +103,8 @@ def auth_reddit():
     # convert response to JSON and pull access_token value
     TOKEN = res.json()['access_token']
 
-    return headers,TOKEN
+    return headers, TOKEN
+
 
 def search(Text):
     headers, TOKEN = auth_reddit()
@@ -115,7 +124,7 @@ def search(Text):
         sub = random.choice(subrreddits)
 
         res = requests.get(sub,
-                    headers=headers)
+                           headers=headers)
 
         url = []
 
@@ -124,29 +133,29 @@ def search(Text):
                 url.append(post['data']['url_overridden_by_dest'])
             except:
                 pass
-            
-        #Pegando somente gifs 
+
+        # Pegando somente gifs
         url = [s for s in url if 'gifv' in s]
 
         print(url)
 
-        #escolhendo o número aleatório 
+        # escolhendo o número aleatório
         url_embed = random.choice(url)
 
-        return url_embed 
+        return url_embed
 
     elif Text == 'lesbians':
         subrreddits = ['https://oauth.reddit.com/r/LesbiansGIF/hot/',
-                'https://oauth.reddit.com/r/LesbiansGifsNSFW/hot/',
-                'https://oauth.reddit.com/r/Lesbianskissing/hot/',
-                'https://oauth.reddit.com/r/lesbians/hot/']
+                       'https://oauth.reddit.com/r/LesbiansGifsNSFW/hot/',
+                       'https://oauth.reddit.com/r/Lesbianskissing/hot/',
+                       'https://oauth.reddit.com/r/lesbians/hot/']
 
         sub = random.choice(subrreddits)
 
         print(sub)
 
         res = requests.get(sub,
-                    headers=headers)
+                           headers=headers)
 
         url = []
 
@@ -155,16 +164,16 @@ def search(Text):
                 url.append(post['data']['url_overridden_by_dest'])
             except:
                 pass
-            
-        #Pegando somente gifs 
+
+        # Pegando somente gifs
         url = [s for s in url if 'gifv' in s]
 
         print(url)
 
-        #escolhendo o número aleatório 
+        # escolhendo o número aleatório
         url_embed = random.choice(url)
 
-        return url_embed 
+        return url_embed
 
     elif Text == 'overwatch':
         subrreddits = ['https://oauth.reddit.com/r/Overwatch_Porn/hot/']
@@ -174,7 +183,7 @@ def search(Text):
         print(sub)
 
         res = requests.get(sub,
-                    headers=headers)
+                           headers=headers)
 
         url = []
 
@@ -183,13 +192,13 @@ def search(Text):
                 url.append(post['data']['url_overridden_by_dest'])
             except:
                 pass
-            
-        #Pegando somente gifs 
+
+        # Pegando somente gifs
         url = [s for s in url if 'gifv' in s]
 
         print(url)
 
-        #escolhendo o número aleatório 
+        # escolhendo o número aleatório
         url_embed = random.choice(url)
 
         return url_embed
@@ -205,7 +214,7 @@ def search(Text):
         print(sub)
 
         res = requests.get(sub,
-                    headers=headers)
+                           headers=headers)
 
         url = []
 
@@ -214,46 +223,44 @@ def search(Text):
                 url.append(post['data']['url_overridden_by_dest'])
             except:
                 pass
-            
-        #Pegando somente gifs 
+
+        # Pegando somente gifs
         url = [s for s in url if 'gifv' in s]
 
         print(url)
 
-        #escolhendo o número aleatório 
+        # escolhendo o número aleatório
         url_embed = random.choice(url)
 
         return url_embed
-    
+
     else:
         res = requests.get("https://oauth.reddit.com/r/TittyDrop/hot/",
-                        headers=headers)
+                           headers=headers)
 
-        
         url = []
 
-        
         for post in res.json()['data']['children']:
             try:
                 url.append(post['data']['url_overridden_by_dest'])
             except:
                 pass
-            
-        #Pegando somente gifs 
+
+        # Pegando somente gifs
         url = [s for s in url if 'gifv' in s]
 
-        #escolhendo o número aleatório 
+        # escolhendo o número aleatório
         url_embed = random.choice(url)
 
         return url_embed
 
 
-#Função para pegar a moeda 
+# Função para pegar a moeda
 
 def bolsa(symbol):
-
-    # Pegando a url 
-    url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}.SA&apikey=F7V1K3CSSAL8YCM2'.format(symbol)
+    # Pegando a url
+    url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}.SA&apikey=F7V1K3CSSAL8YCM2'.format(
+        symbol)
     response = requests.get(url)
     data = response.json()
 
@@ -261,11 +268,12 @@ def bolsa(symbol):
 
     valor = data['Time Series (Daily)'][date]['4. close']
 
-    frase_completa = "O preço de fechamento do dia de hoje ({}) é de R${}".format(date,valor)
+    frase_completa = "O preço de fechamento do dia de hoje ({}) é de R${}".format(date, valor)
 
-    return  frase_completa  
+    return frase_completa
 
-#Função League of Legends - Individual
+
+# Função League of Legends - Individual
 def lol_me(username):
     api_key = 'RGAPI-1ad63cb4-3db7-47dd-a6d6-4e2738eed02f'
     watcher = LolWatcher(api_key)
@@ -279,23 +287,24 @@ def lol_me(username):
     nivel = stats[0]['tier']
     rank = stats[0]['rank']
 
-    frase_completa = 'O rank do jogador {} é {} {}'.format(username,nivel,rank)
-    
+    frase_completa = 'O rank do jogador {} é {} {}'.format(username, nivel, rank)
+
     return frase_completa
 
-#Função League of Legends - Match History 
+
+# Função League of Legends - Match History
 def lol_match(username):
     api_key = 'RGAPI-0e1fade1-9895-4a2d-af55-83fc448b6d3d'
     watcher = LolWatcher(api_key)
     my_region = 'br1'
 
     me = watcher.summoner.by_name(my_region, username)
-    id = me['accountId']  
+    id = me['accountId']
 
-    #Pegando todas as partidas
+    # Pegando todas as partidas
     my_maches = watcher.match.matchlist_by_account(my_region, id)
 
-    #Pegando a última 
+    # Pegando a última
     last_match = my_maches['matches'][0]
     id_last_match = last_match['gameId']
     match_detail = watcher.match.by_id(my_region, id_last_match)
@@ -305,7 +314,6 @@ def lol_match(username):
 
     print(id_last_match)
 
-    
     for row in match_detail['participants']:
         dados_row = {}
         dados_row['champion'] = row['championId']
@@ -317,8 +325,8 @@ def lol_match(username):
         dados_row['goldEarned'] = row['stats']['goldEarned']
         dados_row['champLevel'] = row['stats']['champLevel']
         dados_row['totalMinionsKilled'] = row['stats']['totalMinionsKilled']
-        dados.append(dados_row)   
-       
+        dados.append(dados_row)
+
     for row in match_detail['participantIdentities']:
         sommoners_name = {}
         sommoners_name['username'] = row['player']['summonerName']
@@ -336,19 +344,19 @@ def lol_match(username):
 
     df = pd.DataFrame(dados)
     df['Username'] = sommoners
-    df = df[['Username','championName','win','deaths','kills','assists','totalDamageDealt','goldEarned','totalMinionsKilled']]
+    df = df[['Username', 'championName', 'win', 'deaths', 'kills', 'assists', 'totalDamageDealt', 'goldEarned',
+             'totalMinionsKilled']]
     plt.savefig()
-    return 
-    
+    return
 
 
-
-#--BOT FUNCINANDO -----
+# --BOT FUNCINANDO -----
 @bot.event
 async def on_ready():
     print("O Bot está funcionando")
 
-# -- Commandos messagens --- 
+
+# -- Commandos messagens ---
 @bot.event
 async def on_message(message):
     if message.content.startswith("!hello"):
@@ -377,10 +385,11 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-# -- Comandos musicais -- 
+
+# -- Comandos musicais --
 @bot.command()
-async def play(ctx, url:str):
-    global voice 
+async def play(ctx, url: str):
+    global voice
 
     try:
         channel = ctx.author.voice.channel
@@ -390,33 +399,35 @@ async def play(ctx, url:str):
 
     if os.path.isfile("song.mp3"):
         os.remove('song.mp3')
-        
 
-    ydl_opts = {'format':'bestaudio/best',
-                'postprocessors':[{
-                    'key':'FFmpegExtractAudio',
-                    'preferredcodec':'mp3',
-                    'preferredquality':'192'
+    ydl_opts = {'format': 'bestaudio/best',
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192'
                 }]}
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
-    
+
     for file in os.listdir("."):
         if file.endswith(".mp3"):
             os.rename(file, "song.mp3")
 
     voice.play(discord.FFmpegPCMAudio("song.mp3"))
 
+
 @bot.command()
 async def stop(ctx):
     channel = ctx.author.voice.channel
     voice.stop()
 
+
 @bot.command()
-async def lol_partida(ctx, username:str):
+async def lol_partida(ctx, username: str):
     embed = lol_match(username)
     await ctx.send(embed=embed)
 
-#--END ---
-bot.run(token_bot)
+
+# --END ---
+bot.run(getToken())
